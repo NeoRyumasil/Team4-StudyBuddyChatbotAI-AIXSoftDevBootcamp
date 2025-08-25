@@ -1,8 +1,8 @@
-
 # `Study Buddy Chatbot AI`
 
 **Description**  
 
+**Note for developers : fork the repo first before edit or commit.**
 
 ## 🧑‍💻 Team
 
@@ -50,7 +50,6 @@ cd your-repo
 
 ### Step 3 ...
 ...
-
 
 ## 📋 Requirements (optional)
 - Node.js versi ...
