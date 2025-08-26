@@ -1,6 +1,6 @@
 # `Study Buddy Chatbot AI`
 
-**Description**
+## Description
 Chatbot edukatif yang dirancang untuk membantu pelajar memahami materi dengan interaktif, adaptif, dan menyenangkan.
 Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasis dialog, refleksi, dan personalisasi.
 
