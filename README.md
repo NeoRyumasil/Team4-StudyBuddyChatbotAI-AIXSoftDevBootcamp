@@ -40,7 +40,7 @@ Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasi
 
 ### Step 1. Clone the Repository
 ```bash
-git clone https://github.com/neoryumasil/team4-studybuddychatbotai-aixsoftdevbootcamp.git
+https://github.com/NeoRyumasil/Team4-StudyBuddyChatbotAI-AIXSoftDevBootcamp.git
 cd team4-studybuddychatbotai-aixsoftdevbootcamp
 cd studybuddy
 ```
