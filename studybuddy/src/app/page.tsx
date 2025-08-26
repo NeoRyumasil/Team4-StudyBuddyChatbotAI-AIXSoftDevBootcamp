@@ -111,6 +111,18 @@ export default function Page() {
               'Pilih atau buat chat baru'
             }
           </h1>
+
+          {/* Dropdown Level Pendidikan */}
+          <select
+            value={educationLevel}
+            onChange={(e) => setEducationLevel(e.target.value)}
+            className="border rounded-md px-2 py-1 text-sm"
+          >
+            <option value="SD">SD</option>
+            <option value="SMP">SMP</option>
+            <option value="SMA">SMA</option>
+            <option value="Kuliah">Kuliah</option>
+          </select>
         </div>
 
         {/* Chat Messages */}
@@ -144,6 +156,19 @@ export default function Page() {
             )}
           </ScrollArea.Viewport>
         </ScrollArea.Root>
+
+        {/* Card Buttons */}
+        <div className="flex gap-2 p-3 border-t bg-gray-50">
+          <button className="px-3 py-2 rounded-lg text-sm bg-green-500 text-white hover:bg-green-600">
+            + Soal
+          </button>
+          <button className="px-3 py-2 rounded-lg text-sm bg-purple-500 text-white hover:bg-purple-600">
+            + Flashcard
+          </button>
+          <button className="px-3 py-2 rounded-lg text-sm bg-orange-500 text-white hover:bg-orange-600">
+            + Reflective Q
+          </button>
+        </div>
 
         <Separator.Root className="bg-gray-200 h-px w-full" />
 
