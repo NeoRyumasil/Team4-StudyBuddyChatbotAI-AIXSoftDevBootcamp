@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "./store/chatStore";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Separator from "@radix-ui/react-separator";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function Page() {
   const [input, setInput] = useState("");
@@ -21,6 +23,7 @@ export default function Page() {
     setCurrentChatId
   } = useChatStore();
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
 
   // Load chats saat komponen pertama kali dimuat
   useEffect(() => {
@@ -149,6 +152,7 @@ export default function Page() {
           <ScrollArea.Viewport
             ref={scrollRef}
             className="h-full w-full p-4 space-y-3"
+            style={{ height: "100%" }}
           >
             {isLoading ? (
               <div className="text-center text-gray-500">Loading...</div>
@@ -168,10 +172,14 @@ export default function Page() {
                   }`}
                 >
                   {/* Message Header */}
-                  <div className={`text-xs font-medium mb-1 ${
-                    msg.role === "user" ? "text-right text-blue-600" : "text-left text-gray-600"
-                  }`}>
-                    {msg.role === "user" ? `User [${educationLevel}]` : "StudyBot"}
+                  <div
+                    className={`text-xs font-medium mb-1 ${
+                      msg.role === "user"
+                        ? "text-right text-blue-600"
+                        : "text-left text-gray-600"
+                    }`}
+                  >
+                    {msg.role === "user" ? "User" : "StudyBot"}
                   </div>
                   
                   {/* Message Content */}
@@ -182,12 +190,27 @@ export default function Page() {
                         : "bg-white border"
                     }`}
                   >
-                    {msg.content}
+                    {msg.role === "user" ? (
+                      <div>{msg.content}</div>
+                    ) : (
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))
             )}
           </ScrollArea.Viewport>
+            <ScrollArea.Scrollbar
+              orientation="vertical"
+              className="flex select-none touch-none p-0.5 bg-gray-100 transition-colors duration-150 ease-out hover:bg-gray-200"
+            >
+            <ScrollArea.Thumb className="flex-1 rounded-full bg-gray-400" />
+          </ScrollArea.Scrollbar>
+          <ScrollArea.Corner className="bg-gray-200" />
         </ScrollArea.Root>
 
         {/* Card Buttons */}
@@ -225,7 +248,7 @@ export default function Page() {
           <input
             className="flex-1 border rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-blue-400"
             value={input}
-            placeholder="Tulis pesan..."
+            placeholder="Jelasin apa kesulitanmu dalam belajar..."
             onChange={(e) => setInput(e.target.value)}
           />
           <button
