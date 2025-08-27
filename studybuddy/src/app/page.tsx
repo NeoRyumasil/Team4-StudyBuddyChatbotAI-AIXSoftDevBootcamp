@@ -7,6 +7,8 @@ import * as Separator from "@radix-ui/react-separator";
 
 export default function Page() {
   const [input, setInput] = useState("");
+  const [educationLevel, setEducationLevel] = useState("SD");
+
   const { 
     messages, 
     chats,
@@ -48,7 +50,11 @@ export default function Page() {
       setCurrentChatId(chatId);
     }
 
-    await sendMessage(input, chatId);
+    // Tambahkan prefix level pendidikan ke pesan
+    const educationPrefix = educationLevel ? `[Halo, aku di tingkat: ${educationLevel}]\n` : '';
+    const messageWithEducation = educationPrefix + input;
+
+    await sendMessage(messageWithEducation, chatId);
     setInput("");
   };
 
@@ -64,6 +70,19 @@ export default function Page() {
       // Clear messages untuk chat baru
       useChatStore.setState({ messages: [] });
     }
+  };
+
+  const handleQuickMessage = async (message: string) => {
+    if (!currentChatId) {
+      alert('Pilih atau buat chat terlebih dahulu');
+      return;
+    }
+
+    // Tambahkan prefix level pendidikan ke pesan
+    const educationPrefix = educationLevel ? `[Halo, aku di tingkat: ${educationLevel}]\n` : '';
+    const messageWithEducation = educationPrefix + message;
+
+    await sendMessage(messageWithEducation, currentChatId);
   };
 
   return (
@@ -144,13 +163,27 @@ export default function Page() {
               messages.map((msg, i) => (
                 <div
                   key={msg.id || i}
-                  className={`p-3 my-3 rounded-xl max-w-[80%] text-sm leading-relaxed ${
-                    msg.role === "user"
-                      ? "ml-auto bg-blue-500 text-white"
-                      : "mr-auto bg-white border"
+                  className={`my-3 max-w-[80%] ${
+                    msg.role === "user" ? "ml-auto" : "mr-auto"
                   }`}
                 >
-                  {msg.content}
+                  {/* Message Header */}
+                  <div className={`text-xs font-medium mb-1 ${
+                    msg.role === "user" ? "text-right text-blue-600" : "text-left text-gray-600"
+                  }`}>
+                    {msg.role === "user" ? `User [${educationLevel}]` : "StudyBot"}
+                  </div>
+                  
+                  {/* Message Content */}
+                  <div
+                    className={`p-3 rounded-xl text-sm leading-relaxed ${
+                      msg.role === "user"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white border"
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
                 </div>
               ))
             )}
@@ -159,13 +192,22 @@ export default function Page() {
 
         {/* Card Buttons */}
         <div className="flex gap-2 p-3 border-t bg-gray-50">
-          <button className="px-3 py-2 rounded-lg text-sm bg-green-500 text-white hover:bg-green-600">
+          <button 
+            onClick={() => handleQuickMessage("Buatkan saya soal latihan dari topik yang dibahas")}
+            className="px-3 py-2 rounded-lg text-sm bg-green-500 text-white hover:bg-green-600"
+          >
             + Soal
           </button>
-          <button className="px-3 py-2 rounded-lg text-sm bg-purple-500 text-white hover:bg-purple-600">
+          <button 
+            onClick={() => handleQuickMessage("Buatkan flashcard untuk membantu saya belajar topik ini")}
+            className="px-3 py-2 rounded-lg text-sm bg-purple-500 text-white hover:bg-purple-600"
+          >
             + Flashcard
           </button>
-          <button className="px-3 py-2 rounded-lg text-sm bg-orange-500 text-white hover:bg-orange-600">
+          <button 
+            onClick={() => handleQuickMessage("Buatkan pertanyaan reflektif untuk membantu saya memahami topik ini lebih dalam")}
+            className="px-3 py-2 rounded-lg text-sm bg-orange-500 text-white hover:bg-orange-600"
+          >
             + Reflective Q
           </button>
         </div>
