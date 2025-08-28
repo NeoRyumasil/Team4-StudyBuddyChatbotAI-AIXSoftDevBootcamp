@@ -121,13 +121,11 @@ export default function Page() {
       {/* Area Chat */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="p-3 border-b bg-white">
-          <h1 className="font-medium text-gray-900">
-            {currentChatId ? 
-              chats.find(c => c.id === currentChatId)?.title || 'Chat' : 
-              'Pilih atau buat chat baru'
-            }
-          </h1>
+        <div className="flex items-center justify-between p-3 border-b">
+    <div className="flex items-center gap-2">
+      <img src="/logo SB.png" alt="StudyBuddy Logo" className="h-9 w-11" />
+      <span className="font-bold text-blue-600">StudyBuddy</span>
+    </div>
 
           {/* Dropdown Level Pendidikan */}
           <select
