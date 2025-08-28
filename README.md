@@ -34,6 +34,7 @@ Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasi
 
 **Backend:**
 - AI SDK (Gemini 2.5 Flash)
+- MySQL Database example XAMPP
 - NodeJS
 
 ## 🚀 How to Run the Project
@@ -46,17 +47,36 @@ cd Team4-StudyBuddyChatbotAI-AIXSoftDevBootcamp/studybuddy
 
 ### Step 2. Install Depedencies
 ```bash
-pnpm install
+pnpm add ai @ai-sdk/react @ai-sdk/google
+npx shadcn@latest add
+pnpm add react-markdown remark-gfm
+pnpm install zustand 
 ```
 
 ### Step 3 Setup Environtment
 - Make .env.local file
-- Add gemini API.
+- Add this code on .env.local
+  ```bash
+  GEMINI_API_KEY = Insert your API Key
+  DB_HOST=localhost
+  DB_USER=root
+  DB_PASSWORD=''
+  DB_NAME=chatai
+  ```
+  
+### Step 4 Make Database
+- Activate mySQL database
+- Make database name 'chatai'
+- insert SQL code on this repo to the database
 
-### Step 4 Run Development Server
+### Step 5 Run the Project
 ```bash
-npm run dev
+  npm run dev
 ```
+
+### Step 6 
+- Ctrl + Click localhost link on the terminal to access the AI.
 
 ## 📋 Requirements (optional)
 - Node.js versi 18 or newer
+- MySQL Database example (XAMPP)
