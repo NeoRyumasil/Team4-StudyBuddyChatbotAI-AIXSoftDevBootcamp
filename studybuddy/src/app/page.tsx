@@ -42,15 +42,10 @@ export default function Page() {
     
     let chatId = currentChatId;
     
-    // Jika belum ada chat yang aktif, buat chat baru
+    // Jika belum ada chat yang aktif, wajib membuat/ memilih chat terlebih dahulu
     if (!chatId) {
-      const newTitle = input.length > 50 ? input.substring(0, 50) + "..." : input;
-      chatId = await createNewChat(newTitle);
-      if (!chatId) {
-        alert('Gagal membuat chat baru');
-        return;
-      }
-      setCurrentChatId(chatId);
+      alert('Pilih atau buat chat terlebih dahulu');
+      return;
     }
 
     // Tambahkan prefix level pendidikan ke pesan
@@ -166,14 +161,14 @@ export default function Page() {
             ) : (
               messages.map((msg, i) => (
                 <div
-                  key={msg.id || i}
+                  key={msg.id != null ? `db-${msg.id}` : `ui-${msg.created_at ?? i}`}
                   className={`my-3 max-w-[80%] ${
                     msg.role === "user" ? "ml-auto" : "mr-auto"
                   }`}
                 >
                   {/* Message Header */}
                   <div
-                    className={`text-xs font-medium mb-1 ${
+                    className={`text-md font-medium mb-1 ${
                       msg.role === "user"
                         ? "text-right text-blue-600"
                         : "text-left text-gray-600"
@@ -248,12 +243,13 @@ export default function Page() {
           <input
             className="flex-1 border rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-blue-400"
             value={input}
-            placeholder="Jelasin apa kesulitanmu dalam belajar..."
+            placeholder={currentChatId ? "Jelasin apa kesulitanmu dalam belajar..." : "Klik + Chat Baru untuk memulai"}
             onChange={(e) => setInput(e.target.value)}
+            disabled={!currentChatId}
           />
           <button
             type="submit"
-            disabled={!input.trim()}
+            disabled={!input.trim() || !currentChatId}
             className="px-4 py-2 rounded-lg border bg-blue-500 hover:bg-blue-600 text-white text-sm disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             Kirim

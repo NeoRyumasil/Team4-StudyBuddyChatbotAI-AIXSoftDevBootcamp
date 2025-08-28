@@ -45,7 +45,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
   setMessages: (messages) => set({ messages }),
   addMessage: (role, content) =>
     set((state) => ({
-      messages: [...state.messages, { role, content }],
+      messages: [
+        ...state.messages,
+        { role, content, created_at: new Date().toISOString() },
+      ],
     })),
   setChats: (chats) => set({ chats }),
   setCurrentChatId: (chatId) => set({ currentChatId: chatId }),
