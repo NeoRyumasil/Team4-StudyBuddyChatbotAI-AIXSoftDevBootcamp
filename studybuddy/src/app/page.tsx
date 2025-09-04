@@ -6,13 +6,17 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Separator from "@radix-ui/react-separator";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useGoogleCalendarToken } from "@/lib/useGoogleCalendarToken";
+import { createCalendarEvent } from "@/lib/createCalendarEvents";
+import CalendarConnectButton from "@/components/CalendarConnectButton";
+
 
 export default function Page() {
   const [input, setInput] = useState("");
   const [educationLevel, setEducationLevel] = useState("SD");
 
-  const { 
-    messages, 
+  const {
+    messages,
     chats,
     currentChatId,
     isLoading,
@@ -22,6 +26,7 @@ export default function Page() {
     sendMessage,
     setCurrentChatId
   } = useChatStore();
+  const { accessToken } = useGoogleCalendarToken();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
 
@@ -52,9 +57,27 @@ export default function Page() {
     const educationPrefix = educationLevel ? `[Halo, aku di tingkat: ${educationLevel}]\n` : '';
     const messageWithEducation = educationPrefix + input;
 
-    await sendMessage(messageWithEducation, chatId);
-    setInput("");
-  };
+    // Deteksi intent sederhana
+  if (accessToken && input.toLowerCase().includes("buat jadwal")) {
+    const res = await createCalendarEvent(accessToken, {
+      title: "Belajar bareng AI",
+      description: input,
+      start: "2025-09-05T10:00:00+07:00",
+      end: "2025-09-05T11:00:00+07:00",
+      timezone: "Asia/Jakarta",
+    });
+
+    if (res.success) {
+      alert("✅ Jadwal berhasil ditambahkan ke Google Calendar!");
+    } else {
+      alert("❌ Gagal menambahkan jadwal: " + res.error);
+    }
+  }
+
+  // 2️⃣ Tetap kirim ke AI
+  await sendMessage(messageWithEducation, chatId);
+  setInput("");
+};
 
   const handleSelectChat = async (chatId: number) => {
     setCurrentChatId(chatId);
@@ -125,6 +148,8 @@ export default function Page() {
     <div className="flex items-center gap-2">
       <img src="/logo SB.png" alt="StudyBuddy Logo" className="h-9 w-11" />
       <span className="font-bold text-blue-600">StudyBuddy</span>
+      {/* 🔗 Tambahin tombol connect */}
+      <CalendarConnectButton />
     </div>
 
           {/* Dropdown Level Pendidikan */}
@@ -257,3 +282,4 @@ export default function Page() {
     </div>
   );
 }
+
