@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "./store/chatStore";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import * as Separator from "@radix-ui/react-separator";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Page() {
   const [input, setInput] = useState("");
@@ -70,18 +70,7 @@ export default function Page() {
     }
   };
 
-  const handleQuickMessage = async (message: string) => {
-    if (!currentChatId) {
-      alert('Pilih atau buat chat terlebih dahulu');
-      return;
-    }
-
-    // Tambahkan prefix level pendidikan ke pesan
-    const educationPrefix = educationLevel ? `[Halo, aku di tingkat: ${educationLevel}]\n` : '';
-    const messageWithEducation = educationPrefix + message;
-
-    await sendMessage(messageWithEducation, currentChatId);
-  };
+  const { data: session } = useSession();
 
   return (
     <div className="flex w-full h-screen">
@@ -94,7 +83,19 @@ export default function Page() {
           >
             + Chat Baru
           </button>
+
+            {/* Tombol Authentikasi */}
+          <div>
+          {session ? (
+            <>
+              <p>Hi, {session.user?.name}</p>
+              <button onClick={() => signOut()}>Logout</button>
+            </>
+          ) : (
+            <button onClick={() => signIn("google")}>Login dengan Google</button>
+          )}
         </div>
+      </div>
         
         <ScrollArea.Root className="flex-1">
           <ScrollArea.Viewport className="h-full w-full p-2">
@@ -205,9 +206,9 @@ export default function Page() {
           </ScrollArea.Scrollbar>
           <ScrollArea.Corner className="bg-gray-200" />
         </ScrollArea.Root>
-
+   
         {/* Card Buttons */}
-        <div className="flex gap-2 p-3 border-t bg-gray-50">
+        {/* <div className="flex gap-2 p-3 border-t bg-gray-50">
           <button 
             onClick={() => handleQuickMessage("Buatkan saya soal latihan dari topik yang dibahas")}
             className="px-3 py-2 rounded-lg text-sm bg-green-500 text-white hover:bg-green-600"
@@ -228,7 +229,7 @@ export default function Page() {
           </button>
         </div>
 
-        <Separator.Root className="bg-gray-200 h-px w-full" />
+        <Separator.Root className="bg-gray-200 h-px w-full" /> */}
 
         {/* Input Form */}
         <form
