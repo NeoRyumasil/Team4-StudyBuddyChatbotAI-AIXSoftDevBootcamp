@@ -61,6 +61,7 @@ Jika informasi belum lengkap, tanyakan detail yang dibutuhkan seperti:
 - Durasi atau waktu selesai
 - Lokasi (opsional)`;
     }
+
     // Panggil API Gemini
     const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
     const response = await fetch(
