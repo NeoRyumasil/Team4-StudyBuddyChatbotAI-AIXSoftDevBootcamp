@@ -4,10 +4,10 @@ import { db } from "@/lib/db"; // Sesuaikan path dengan lokasi file db Anda
 
 export async function GET(
   req: Request,
-  { params }: { params: { chatId: string } }
+  context: { params: { chatId: string } }
 ) {
   try {
-    const chatId = parseInt(params.chatId);
+    const chatId = parseInt((await context).params.chatId);
 
     if (isNaN(chatId)) {
       return NextResponse.json(
