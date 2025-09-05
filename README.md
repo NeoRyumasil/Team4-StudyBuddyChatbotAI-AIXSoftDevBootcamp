@@ -22,6 +22,7 @@ Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasi
 - **📊 Adaptive Learning Flow**               : Sistem pembelajaran menyesuaikan performa dan respons pengguna.
 - **🧠 Flashcard Session**                    : Pengguna dapat mengenerate flashcard berdasarkan materi yang dibahas.
 - **🌐 Decentralized Frontend Architecture**  : Frontend bersifat modular dan scalable sehingga bisa mengembangkan fitur tanpa mengaggu sistem utama.
+- 
 
 
 ## 🛠 Tech Stack
