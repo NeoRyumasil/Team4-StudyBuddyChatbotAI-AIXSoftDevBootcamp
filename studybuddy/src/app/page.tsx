@@ -71,6 +71,10 @@ export default function Page() {
         return;
       }
 
+      // Parse title from user message - extract what's between "jadwal" and "pada"
+      const titleMatch = input.match(/jadwal (.+?) pada/i);
+      const eventTitle = titleMatch ? titleMatch[1].trim() : "Belajar bareng AI";
+
       // Parse date from user message
       const dateMatch = input.match(/tanggal (\d{1,2}) (\w+)/i) || input.match(/(\d{1,2}) (\w+)/i);
       let eventDate = "2025-09-05"; // default
@@ -93,17 +97,32 @@ export default function Page() {
         }
       }
 
+      // Parse time range from user message - handle both formats: "08.00 - 10.00" and "8 - 10"
+      const timeMatch = input.match(/pukul (\d{1,2})(?:\.(\d{1,2}))? ?- ?(\d{1,2})(?:\.(\d{1,2}))?/i);
+      let startTime = "10:00:00";
+      let endTime = "11:00:00";
+
+      if (timeMatch) {
+        const startHour = timeMatch[1].padStart(2, '0');
+        const startMinute = timeMatch[2] ? timeMatch[2].padStart(2, '0') : "00";
+        const endHour = timeMatch[3].padStart(2, '0');
+        const endMinute = timeMatch[4] ? timeMatch[4].padStart(2, '0') : "00";
+
+        startTime = `${startHour}:${startMinute}:00`;
+        endTime = `${endHour}:${endMinute}:00`;
+      }
+
       try {
         const res = await createCalendarEvent(token, {
-          title: "Belajar bareng AI",
+          title: eventTitle,
           description: input,
-          start: `${eventDate}T10:00:00+07:00`,
-          end: `${eventDate}T11:00:00+07:00`,
+          start: `${eventDate}T${startTime}+07:00`,
+          end: `${eventDate}T${endTime}+07:00`,
           timezone: "Asia/Jakarta",
         });
 
         if (res.success) {
-          alert(`✅ Jadwal berhasil ditambahkan ke Google Calendar untuk tanggal ${eventDate}!`);
+          alert(`✅ Jadwal berhasil ditambahkan ke Google Calendar untuk tanggal ${eventDate} pukul ${startTime} - ${endTime}!`);
         } else {
           alert("❌ Gagal menambahkan jadwal: " + res.error);
         }
