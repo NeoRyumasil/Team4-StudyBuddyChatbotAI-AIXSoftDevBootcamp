@@ -32,7 +32,7 @@ Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasi
 - Tailwind CSS
 - ShadCN
 - Zustand
-i
+
 **Backend:**
 - AI SDK (Gemini 2.5 Flash)
 - MySQL Database example XAMPP
