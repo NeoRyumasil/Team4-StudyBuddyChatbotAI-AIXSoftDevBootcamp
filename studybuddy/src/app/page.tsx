@@ -3,13 +3,12 @@
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "./store/chatStore";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import * as Separator from "@radix-ui/react-separator";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useGoogleCalendarToken } from "@/lib/useGoogleCalendarToken";
 import { createCalendarEvent } from "@/lib/createCalendarEvents";
 import CalendarConnectButton from "@/components/CalendarConnectButton";
-
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Page() {
   const [input, setInput] = useState("");
@@ -150,18 +149,7 @@ export default function Page() {
     }
   };
 
-  const handleQuickMessage = async (message: string) => {
-    if (!currentChatId) {
-      alert('Pilih atau buat chat terlebih dahulu');
-      return;
-    }
-
-    // Tambahkan prefix level pendidikan ke pesan
-    const educationPrefix = educationLevel ? `[Halo, aku di tingkat: ${educationLevel}]\n` : '';
-    const messageWithEducation = educationPrefix + message;
-
-    await sendMessage(messageWithEducation, currentChatId);
-  };
+  const { data: session } = useSession();
 
   return (
     <div className="flex w-full h-screen">
@@ -174,8 +162,19 @@ export default function Page() {
           >
             + Chat Baru
           </button>
-        </div>
 
+            {/* Tombol Authentikasi */}
+          <div>
+          {session ? (
+            <>
+              <p>Hi, {session.user?.name}</p>
+              <button onClick={() => signOut()}>Logout</button>
+            </>
+          ) : (
+            <button onClick={() => signIn("google")}>Login dengan Google</button>
+          )}
+        </div>
+      </div>
         <ScrollArea.Root className="flex-1">
           <ScrollArea.Viewport className="h-full w-full p-2">
             {chats.map((chat) => (
@@ -287,7 +286,7 @@ export default function Page() {
           </ScrollArea.Scrollbar>
           <ScrollArea.Corner className="bg-gray-200" />
         </ScrollArea.Root>
-
+   
         {/* Card Buttons */}
         <div className="flex gap-2 p-3 border-t bg-gray-50">
           <button
@@ -310,7 +309,7 @@ export default function Page() {
           </button>
         </div>
 
-        <Separator.Root className="bg-gray-200 h-px w-full" />
+        <Separator.Root className="bg-gray-200 h-px w-full" /> */}
 
         {/* Input Form */}
         <form
