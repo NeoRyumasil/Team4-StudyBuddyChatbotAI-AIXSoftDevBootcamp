@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     // Simpan response AI ke database
     await db.execute(
       "INSERT INTO message (chat_id, role, content) VALUES (?, ?, ?)",
-      [chatId, "ai", aiMessage]
+      [chatId, "assistant", aiMessage]
     );
 
     return NextResponse.json({ reply: aiMessage });

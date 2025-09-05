@@ -42,11 +42,17 @@ export default function Page() {
     }
   }, [messages]);
 
+  // Debug accessToken changes
+  useEffect(() => {
+    console.log("Access token in page.tsx:", accessToken);
+    console.log("Access token from localStorage:", localStorage.getItem('google_access_token'));
+  }, [accessToken]);
+
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    
+
     let chatId = currentChatId;
-    
+
     // Jika belum ada chat yang aktif, wajib membuat/ memilih chat terlebih dahulu
     if (!chatId) {
       alert('Pilih atau buat chat terlebih dahulu');
@@ -58,26 +64,58 @@ export default function Page() {
     const messageWithEducation = educationPrefix + input;
 
     // Deteksi intent sederhana
-  if (accessToken && input.toLowerCase().includes("buat jadwal")) {
-    const res = await createCalendarEvent(accessToken, {
-      title: "Belajar bareng AI",
-      description: input,
-      start: "2025-09-05T10:00:00+07:00",
-      end: "2025-09-05T11:00:00+07:00",
-      timezone: "Asia/Jakarta",
-    });
+    if (input.toLowerCase().includes("buat jadwal")) {
+      const token = accessToken || localStorage.getItem('google_access_token');
+      if (!token) {
+        alert("❌ Silakan connect ke Google Calendar terlebih dahulu dengan klik tombol 'Connect Google Calendar'");
+        return;
+      }
 
-    if (res.success) {
-      alert("✅ Jadwal berhasil ditambahkan ke Google Calendar!");
-    } else {
-      alert("❌ Gagal menambahkan jadwal: " + res.error);
+      // Parse date from user message
+      const dateMatch = input.match(/tanggal (\d{1,2}) (\w+)/i) || input.match(/(\d{1,2}) (\w+)/i);
+      let eventDate = "2025-09-05"; // default
+
+      if (dateMatch) {
+        const day = dateMatch[1].padStart(2, '0');
+        const monthName = dateMatch[2].toLowerCase();
+
+        const monthMap: { [key: string]: string } = {
+          'januari': '01', 'februari': '02', 'maret': '03', 'april': '04',
+          'mei': '05', 'juni': '06', 'juli': '07', 'agustus': '08',
+          'september': '09', 'oktober': '10', 'november': '11', 'desember': '12',
+          'january': '01', 'february': '02', 'march': '03',
+          'may': '05', 'june': '06', 'july': '07', 'august': '08',
+          'october': '10', 'december': '12'
+        };
+
+        if (monthMap[monthName]) {
+          eventDate = `2025-${monthMap[monthName]}-${day}`;
+        }
+      }
+
+      try {
+        const res = await createCalendarEvent(token, {
+          title: "Belajar bareng AI",
+          description: input,
+          start: `${eventDate}T10:00:00+07:00`,
+          end: `${eventDate}T11:00:00+07:00`,
+          timezone: "Asia/Jakarta",
+        });
+
+        if (res.success) {
+          alert(`✅ Jadwal berhasil ditambahkan ke Google Calendar untuk tanggal ${eventDate}!`);
+        } else {
+          alert("❌ Gagal menambahkan jadwal: " + res.error);
+        }
+      } catch (error) {
+        alert("❌ Terjadi kesalahan saat menambahkan jadwal: " + (error as Error).message);
+      }
     }
-  }
 
-  // 2️⃣ Tetap kirim ke AI
-  await sendMessage(messageWithEducation, chatId);
-  setInput("");
-};
+    // 2️⃣ Tetap kirim ke AI
+    await sendMessage(messageWithEducation, chatId);
+    setInput("");
+  };
 
   const handleSelectChat = async (chatId: number) => {
     setCurrentChatId(chatId);
@@ -118,7 +156,7 @@ export default function Page() {
             + Chat Baru
           </button>
         </div>
-        
+
         <ScrollArea.Root className="flex-1">
           <ScrollArea.Viewport className="h-full w-full p-2">
             {chats.map((chat) => (
@@ -176,8 +214,8 @@ export default function Page() {
               <div className="text-center text-gray-500">Loading...</div>
             ) : messages.length === 0 ? (
               <div className="text-center text-gray-500 mt-8">
-                {currentChatId ? 
-                  "Belum ada pesan. Mulai percakapan!" : 
+                {currentChatId ?
+                  "Belum ada pesan. Mulai percakapan!" :
                   "Pilih chat atau buat chat baru untuk memulai"
                 }
               </div>
@@ -199,7 +237,7 @@ export default function Page() {
                   >
                     {msg.role === "user" ? "User" : "StudyBot"}
                   </div>
-                  
+
                   {/* Message Content */}
                   <div
                     className={`p-3 rounded-xl text-sm leading-relaxed ${
@@ -233,19 +271,19 @@ export default function Page() {
 
         {/* Card Buttons */}
         <div className="flex gap-2 p-3 border-t bg-gray-50">
-          <button 
+          <button
             onClick={() => handleQuickMessage("Buatkan saya soal latihan dari topik yang dibahas")}
             className="px-3 py-2 rounded-lg text-sm bg-green-500 text-white hover:bg-green-600"
           >
             + Soal
           </button>
-          <button 
+          <button
             onClick={() => handleQuickMessage("Buatkan flashcard untuk membantu saya belajar topik ini")}
             className="px-3 py-2 rounded-lg text-sm bg-purple-500 text-white hover:bg-purple-600"
           >
             + Flashcard
           </button>
-          <button 
+          <button
             onClick={() => handleQuickMessage("Buatkan pertanyaan reflektif untuk membantu saya memahami topik ini lebih dalam")}
             className="px-3 py-2 rounded-lg text-sm bg-orange-500 text-white hover:bg-orange-600"
           >
@@ -282,4 +320,3 @@ export default function Page() {
     </div>
   );
 }
-
