@@ -20,6 +20,7 @@ Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasi
 - **📚 Chat History Tracking**                : Menyimpan riwayat percakapan agar pengguna bisa meninjau kembali materi yang dibahas.
 - **🎓 Education Level Selector**             : Bisa menyesuaikan gaya bahasa dan kedalaman materi terhadap tingkat edukasi pengguna.
 - **📊 Adaptive Learning Flow**               : Sistem pembelajaran menyesuaikan performa dan respons pengguna.
+- **📆 Scheduling**                           : Bisa menjadwalkan event pada google calendar
 - **🧠 Flashcard Session**                    : Pengguna dapat mengenerate flashcard berdasarkan materi yang dibahas.
 - **🌐 Decentralized Frontend Architecture**  : Frontend bersifat modular dan scalable sehingga bisa mengembangkan fitur tanpa mengaggu sistem utama.
 
@@ -31,7 +32,7 @@ Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasi
 - Tailwind CSS
 - ShadCN
 - Zustand
-
+i
 **Backend:**
 - AI SDK (Gemini 2.5 Flash)
 - MySQL Database example XAMPP
@@ -58,6 +59,12 @@ pnpm install zustand
 - Add this code on .env.local
   ```bash
   GEMINI_API_KEY = Insert your API Key
+
+  GOOGLE_CLIENT_ID = Insert your google client id
+  GOOGLE_CLIENT_SECRET = Insert yout google client secret
+  NEXTAUTH_SECRET = Insert String
+  NEXTAUTH_URL = http://localhost:3000
+  
   DB_HOST=localhost
   DB_USER=root
   DB_PASSWORD=''
