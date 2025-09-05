@@ -63,7 +63,7 @@ export default function Page() {
     const educationPrefix = educationLevel ? `[Halo, aku di tingkat: ${educationLevel}]\n` : '';
     const messageWithEducation = educationPrefix + input;
 
-    // Deteksi intent sederhana
+    // Deteksi intent 
     if (input.toLowerCase().includes("buat jadwal")) {
       const token = accessToken || localStorage.getItem('google_access_token');
       if (!token) {
