@@ -29,7 +29,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching messages:', error);
     return NextResponse.json(
-      { error: "Gagal mengambil pesan" },
+      { error: "Gagal mengambil pesan lagi" },
       { status: 500 }
     );
   }
