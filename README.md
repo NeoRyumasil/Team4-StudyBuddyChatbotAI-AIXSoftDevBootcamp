@@ -21,6 +21,7 @@ Berfokus untuk mendukung Quality Education (SDG #4) melalui pembelajaran berbasi
 - **🎓 Education Level Selector**             : Bisa menyesuaikan gaya bahasa dan kedalaman materi terhadap tingkat edukasi pengguna.
 - **📊 Adaptive Learning Flow**               : Sistem pembelajaran menyesuaikan performa dan respons pengguna.
 - **🧠 Flashcard Session**                    : Pengguna dapat mengenerate flashcard berdasarkan materi yang dibahas.
+- **📆 Assign Events On Calendar**            : Bisa membuat jadwal/event di google calendar sesuai permintaan pengguna.
 - **🌐 Decentralized Frontend Architecture**  : Frontend bersifat modular dan scalable sehingga bisa mengembangkan fitur tanpa mengaggu sistem utama.
 
 
